@@ -1,12 +1,26 @@
 package com.scm.Controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.scm.Service.UserService;
+import com.scm.entities.User;
+import com.scm.form.UserForm;
+
+
 
 @Controller
 public class PageController {
 
+    @Autowired
+    private UserService userService;
+
+    //home page
     @RequestMapping("/home")
     public String home(Model model){
 
@@ -17,28 +31,80 @@ public class PageController {
         return "home";
     } 
 
-
+    //about page
 
     @RequestMapping("/about")
     public String aboutPage(Model model) {
-
-        model.addAttribute("isLogin", true);
-
         System.out.println("About page loading");
         return "about";
-
     }
-
+    //Services pagrr
 
       @RequestMapping("/services")
     public String servicePage(Model model) {
-        model.addAttribute("isLogin",false
-            
-        );
-
         System.out.println("Services page loading");
         return "services";
     }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @GetMapping("/register")
+    public String register(Model model) {
+        UserForm userForm=new UserForm();
+        model.addAttribute("userForm", userForm);
+        // userForm.setName("AjayGuptaaaaa");
+        // userForm.setEmail("AjayBHAi@!23");
+        // userForm.setPhoneNumber("12121212");
+        return "register";
+    }
+
+    @RequestMapping(value="/do-register", method=RequestMethod.POST)
+    public String processRegister(@ModelAttribute UserForm userForm) {
+      
+       System.out.println("Processing Register");
+       System.out.println("UserForm");
+
+       //UserService
+       //userForm-->User
+
+        // User user=User.builder()
+        // .name(userForm.getName())
+        // .email(userForm.getEmail())
+        // .password(userForm.getPassword())
+        // .about(userForm.getAbout())
+        // .phoneNumber(userForm.getPhoneNumber())  
+        // .build();
+
+        // User savedUser= userService.saveUser(user);
+
+        
+        User user = new User();
+        user.setName(userForm.getName());
+        user.setEmail(userForm.getEmail());
+        user.setPassword(userForm.getPassword());
+        user.setAbout(userForm.getAbout());
+        user.setPhoneNumber(userForm.getPhoneNumber());
+        user.setEnabled(false);
+        user.setProfilePic(
+                "https://www.learncodewithdurgesh.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdurgesh_sir.35c6cb78.webp&w=1920&q=75");
+
+        User savedUser = userService.saveUser(user);
+
+      
+       return "redirect:/register";
+    }
+    
+
+    @GetMapping("/contact")
+    public String contact() {
+        return "contact";
+    }
+    
+    
+    
 
 
 }

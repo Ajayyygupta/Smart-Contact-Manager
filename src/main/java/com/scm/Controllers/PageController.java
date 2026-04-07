@@ -10,7 +10,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.scm.Service.UserService;
 import com.scm.entities.User;
+import com.scm.entities.Users;
 import com.scm.form.UserForm;
+import com.scm.helper.Message;
+import com.scm.helper.MessageType;
+import com.scm.helper.message;
+
+import jakarta.servlet.http.HttpSession;
 
 
 
@@ -62,10 +68,10 @@ public class PageController {
     }
 
     @RequestMapping(value="/do-register", method=RequestMethod.POST)
-    public String processRegister(@ModelAttribute UserForm userForm) {
+    public String processRegister(@ModelAttribute UserForm userForm, HttpSession session) {
       
        System.out.println("Processing Register");
-       System.out.println("UserForm");
+       System.out.println(userForm);
 
        //UserService
        //userForm-->User
@@ -81,7 +87,7 @@ public class PageController {
         // User savedUser= userService.saveUser(user);
 
         
-        User user = new User();
+        Users user = new Users();
         user.setName(userForm.getName());
         user.setEmail(userForm.getEmail());
         user.setPassword(userForm.getPassword());
@@ -91,10 +97,18 @@ public class PageController {
         user.setProfilePic(
                 "https://www.learncodewithdurgesh.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdurgesh_sir.35c6cb78.webp&w=1920&q=75");
 
-        User savedUser = userService.saveUser(user);
+        Users savedUser = userService.saveUser(user);
 
-      
-       return "redirect:/register";
+        //messge ="Regisyration succesfull"
+
+        //add thed messagemr
+
+        Message message=Message.builder().content("Registration Succesfully").type(MessageType.green).build();
+
+        session.setAttribute("message", message);
+        
+        //redirect to login page
+        return "redirect:/register";
     }
     
 

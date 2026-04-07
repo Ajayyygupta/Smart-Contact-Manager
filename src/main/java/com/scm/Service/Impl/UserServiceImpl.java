@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.scm.Repositories.UserRepo;
 import com.scm.Service.UserService;
 import com.scm.entities.User;
+import com.scm.entities.Users;
 import com.scm.helper.ResourceNotFoundException;
 
 
@@ -25,7 +26,7 @@ public class UserServiceImpl implements UserService {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
-    public User saveUser(User user) {
+    public Users saveUser(Users user) {
         //User id: dynamically generate karenge
          String userId =UUID.randomUUID().toString();
          user.setUserID(userId);
@@ -33,13 +34,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserById(String id) {
+    public Optional<Users> getUserById(String id) {
         return userRepo.findById(id);
     }
 
     @Override
-    public Optional<User> updateUser(User user) {
-       User user2=userRepo.findById(user.getUserID()).orElseThrow(()-> new ResourceNotFoundException("User not found"));
+    public Optional<Users> updateUser(Users user) {
+       Users user2=userRepo.findById(user.getUserID()).orElseThrow(()-> new ResourceNotFoundException("User not found"));
 
        //User 2 me nayi imformation jo databse se aai hai, Isliye ab ham update karenge \
        //User 2 from User
@@ -57,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
        //save the user in databse
 
-      User save= userRepo.save(user2);
+      Users save= userRepo.save(user2);
       return Optional.ofNullable(save);
 
     }
@@ -65,26 +66,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(String id) {
 
-        User user2=userRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("User not found"));
+        Users user2=userRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("Users not found"));
         userRepo.delete(user2);
         
     }
 
     @Override
     public boolean isUserExist(String userId) {
-        User user2=userRepo.findById(userId).orElse(null);
+        Users user2=userRepo.findById(userId).orElse(null);
         return user2!=null ? true : false;
        
     }
 
     @Override
     public boolean isUSerExistByEmail(String email) {
-      User user= userRepo.findByEmail(email).orElse(null);
+      Users user= userRepo.findByEmail(email).orElse(null);
       return user!= null ? true : false;
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<Users> getAllUsers() {
         return userRepo.findAll();
     }
 

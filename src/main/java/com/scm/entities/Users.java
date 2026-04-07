@@ -6,6 +6,8 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -23,7 +25,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User {
+public class Users {
 
     @Id
     private String userID;
@@ -42,8 +44,9 @@ public class User {
     private boolean emailVerified =false;
     private boolean phoneVerified =false;
 
+    @Enumerated(value=EnumType.STRING)
     //SELF GOOGLE FACEBOOK, TWITTER, LINKEDIN, GITHUB
-    private Providers provide=Providers.SELF;
+    private Providers provider=Providers.SELF;
     private String providerUserid;
 
     @OneToMany(mappedBy="user" ,cascade=CascadeType.ALL, fetch=FetchType.LAZY ,orphanRemoval=true)

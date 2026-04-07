@@ -28,7 +28,7 @@ public class Contact  {
     private String linkedInLink;
 
     @ManyToOne
-    private User user;
+    private Users user;
 
     @OneToMany(mappedBy="contact", cascade=CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
     private List<SocialLink> link=new ArrayList<>();

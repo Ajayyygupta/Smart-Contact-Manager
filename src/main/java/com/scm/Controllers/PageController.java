@@ -3,6 +3,7 @@ package com.scm.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import com.scm.helper.MessageType;
 import com.scm.helper.message;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 
 
@@ -68,10 +70,17 @@ public class PageController {
     }
 
     @RequestMapping(value="/do-register", method=RequestMethod.POST)
-    public String processRegister(@ModelAttribute UserForm userForm, HttpSession session) {
+    public String processRegister(@Valid @ModelAttribute UserForm userForm, BindingResult rBindingResult, HttpSession session) {
       
        System.out.println("Processing Register");
        System.out.println(userForm);
+
+
+       //validate the form data
+       if(rBindingResult.hasErrors())
+       {
+        return "register";
+       }
 
        //UserService
        //userForm-->User
@@ -101,7 +110,7 @@ public class PageController {
 
         //messge ="Regisyration succesfull"
 
-        //add thed messagemr
+        //add the message
 
         Message message=Message.builder().content("Registration Succesfully").type(MessageType.green).build();
 
